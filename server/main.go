@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	domain "restAPI/domain"
+	"restAPI/server/domain"
 	"strconv"
 )
 
@@ -35,7 +35,7 @@ func searchTask(c * gin.Context){
 	}
 
 	var response domain.Task
-	for _,task := range domain.Tasks{
+	for _,task := range domain.Tasks {
 		if(task.ID == id){
 			response = task
 			break
@@ -51,7 +51,7 @@ func main(){
 	r.GET("/getTasks", getTask)
 	r.POST("/createTask", addTask)
 	r.GET("/searchTask", searchTask)
-	r.Run(":8080")
+	r.Run(":8089")
 	t := domain.Task{}
 	fmt.Println(t)
 }

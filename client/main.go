@@ -15,11 +15,14 @@ var cb *gobreaker.CircuitBreaker // 1
 func init() {
 	var settings gobreaker.Settings // 2
 	settings.Name = "HTTP GET"
+
+	//Esta funcion decide cuando abrir el circuito
 	settings.ReadyToTrip = func(counts gobreaker.Counts) bool {
 		// circuit breaker will trip when 60% of requests failed and at least 10 requests were made
 		failureRatio := float64(counts.TotalFailures) / float64(counts.Requests)
 		return counts.Requests >= 10 && failureRatio >= 0.6
 	}
+	//tiempo entre intentos antes de hacer otra llamada
 	settings.Timeout = time.Millisecond
 	settings.OnStateChange = func(name string, from gobreaker.State, to gobreaker.State) {
 		if to == gobreaker.StateOpen {
@@ -61,7 +64,7 @@ func Get(url string) ([]byte, error) {
 
 func main() {
 	urlIncorrect := "http://localhost:8091"
-	urlCorrect := "http://localhost:8090"
+	urlCorrect := "http://localhost:8089/ping"
 	var body []byte
 	var err error
 	for i := 0; i < 20; i++ {
